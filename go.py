@@ -132,7 +132,8 @@ def main():
 
             # Process each file in the animal's directory
             for filepath in file_list:
-                print(f"Processing file: {os.path.basename(filepath)}")
+                try:
+                    print(f"Processing file: {os.path.basename(filepath)}")
                     df = process_file(filepath)
                     # Generate output filename
                     filename = os.path.basename(filepath).replace('.txt', '.csv')  # Save as CSV
