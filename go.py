@@ -88,8 +88,6 @@ def process_file(filepath):
     elif len(combined_headers) < n:
         combined_headers += ['Unnamed'] * (n - len(combined_headers))
 
-    debug_print("DataFrame with combined headers:")
-    debug_print(data.head())
     data.columns = combined_headers
 
     # Add body part prefixes to x, y, and frame columns
