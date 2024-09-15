@@ -120,7 +120,7 @@ def main():
 
         # Only proceed if it's a directory
         if os.path.isdir(animal_path):
-            debug_print(f"Processing animal type: {animal_dir}")
+            print(f"Processing animal type: {animal_dir}")
 
             # Define the file patterns to look for
             patterns = ['ott_*.txt', 'otter_*.txt']  # Adjust based on expected file patterns
@@ -132,7 +132,7 @@ def main():
 
             # Process each file in the animal's directory
             for filepath in file_list:
-                try:
+                print(f"Processing file: {os.path.basename(filepath)}")
                     df = process_file(filepath)
                     # Generate output filename
                     filename = os.path.basename(filepath).replace('.txt', '.csv')  # Save as CSV
