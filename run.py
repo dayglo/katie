@@ -61,7 +61,7 @@ def flatten_headers(file_path, output_path):
     # Write output to new file
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', newline='', encoding='utf-8') as outfile:
-        writer = csv.writer(outfile, delimiter='\t')
+        writer = csv.writer(outfile, delimiter=',')  # Change delimiter to comma
         writer.writerow(new_header)
         writer.writerows(data_rows)
 
@@ -71,7 +71,7 @@ def process_files(base_dir):
             if file.endswith('.txt'):
                 input_file = os.path.join(root, file)
                 # Modify the output path as needed; here we append '_flattened' to the filename
-                output_file = os.path.join(root, file.replace('.txt', '_flattened.txt'))
+                output_file = os.path.join(root, file.replace('.txt', '_flattened.csv'))
                 flatten_headers(input_file, output_file)
                 print(f"Processed {input_file} -> {output_file}")
 
