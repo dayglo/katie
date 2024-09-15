@@ -27,7 +27,13 @@ def process_file(file_path, output_data):
     headers = df.columns
     body_parts = set(header.rsplit('_', 1)[0] for header in headers if '_x' in header)
 
-    # Iterate over each row in the DataFrame
+    # Determine the eye side based on the trial name
+    if trial_info.lower().endswith('_left'):
+        eye_side = 'left_eye'
+    elif trial_info.lower().endswith('_right'):
+        eye_side = 'right_eye'
+    else:
+        eye_side = None
     for index, row in df.iterrows():
         # Iterate over each body part
         for body_part in body_parts:
@@ -38,6 +44,11 @@ def process_file(file_path, output_data):
             # Check if all necessary data is present and columns exist
             if x_col in row and y_col in row and frame_col in row:
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
+                    mark = body_part
+                    # Change 'eye_n' to the appropriate eye side
+                    if mark == 'eye_n' and eye_side:
+                        mark = eye_side
+
                     output_data.append({
                         'frame': int(row[frame_col]),
                         'stance': '',  # Stance is not provided in the input
