@@ -22,9 +22,10 @@ def flatten_headers(file_path):
     # Process the data lines
     data_lines = [line.strip().split('\t')[1:] for line in lines[3:]]
 
-    # Write the processed data back to the file
-    print("Writing processed data back to the file...")
-    with open(file_path, 'w') as file:
+    # Write the processed data to a new file
+    output_file_path = file_path.replace('.txt', '_processed.txt')
+    print(f"Writing processed data to {output_file_path}...")
+    with open(output_file_path, 'w') as file:
         file.write('\t'.join(flattened_headers) + '\n')
         for data_line in data_lines:
             file.write('\t'.join(data_line) + '\n')
