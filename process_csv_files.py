@@ -13,6 +13,9 @@ def process_file(file_path, output_data):
     # Assuming the format is something like 'hyn_01_left', 'ott_02_right', etc.
     video_number = trial_info.split('_')[1].lstrip('0')  # Remove leading zeros
 
+    # Construct the lookup file path
+    lookupfile = f'./framelookup/{animal_name}/{video_number}.csv'
+
     # Read the CSV file
     try:
         df = pd.read_csv(file_path)
