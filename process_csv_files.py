@@ -85,6 +85,9 @@ def recombine_to_clean_value(value):
         else:
             recombined_value = "tail_end"
     
+    # Replace "thigh" with "thai"
+    recombined_value = recombined_value.replace("thigh", "thai")
+    
     return recombined_value
 def process_file(file_path, output_data):
     file_name = os.path.basename(file_path)
