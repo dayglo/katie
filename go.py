@@ -21,7 +21,24 @@ def process_file(filepath):
     
     # Read the data starting from the third line
     data_str = ''.join(lines[2:])
-    data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python', error_bad_lines=False)
+    
+    # Split the data into lines and process each line
+    data_lines = data_str.splitlines()
+    valid_data = []
+    for line in data_lines:
+        try:
+            # Attempt to parse the line
+            parsed_line = pd.read_csv(StringIO(line), sep='\t', header=None, engine='python')
+            valid_data.append(parsed_line)
+        except Exception as e:
+            # Print the line and the error if parsing fails
+            print(f"Bad line: {line} - Error: {e}")
+    
+    # Concatenate all valid data into a single DataFrame
+    if valid_data:
+        data = pd.concat(valid_data, ignore_index=True)
+    else:
+        data = pd.DataFrame()
     
     # Remove the first column (t)
     data = data.iloc[:, 1:]
