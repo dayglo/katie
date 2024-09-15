@@ -8,73 +8,6 @@ mapping_rules = {
     # Example: "messy_value": "clean_value"
 }
 
-# Function to map messy values to clean values
-def map_to_clean_value(messy_value):
-    return mapping_rules.get(messy_value, "Unknown")
-    allowed_values = {
-        "nose", "upper_jaw", "lower_jaw", "mouth_end_right", "mouth_end_left",
-        "right_eye", "right_earbase", "right_earend", "right_antler_base", "right_antler_end",
-        "left_eye", "left_earbase", "left_earend", "left_antler_base", "left_antler_end",
-        "neck_base", "neck_end", "throat_base", "throat_end", "back_base", "back_end",
-        "back_middle", "tail_base", "tail_end", "front_left_thai", "front_left_knee",
-        "front_left_paw", "front_right_thai", "front_right_knee", "front_right_paw",
-        "back_left_paw", "back_left_thai", "back_right_thai", "back_left_knee",
-        "back_right_knee", "back_right_paw", "belly_bottom", "body_middle_right",
-        "body_middle_left"
-    }
-
-    # If the mark is already clean, return it
-    if mark in allowed_values:
-        return mark
-
-    # Normalize the mark by replacing spaces with underscores and splitting into words
-    words = mark.replace(' ', '_').split('_')
-
-    # Define possible components
-    sides = {"left", "right"}
-    positions = {"front", "back"}
-    body_parts = {
-        "nose", "jaw", "mouth", "eye", "earbase", "earend", "antler", "neck", "throat",
-        "back", "tail", "thai", "knee", "paw", "belly", "body"
-    }
-    ends = {"end", "base", "middle", "bottom"}
-
-    # Initialize components
-    side = None
-    position = None
-    body_part = None
-    end = None
-
-    # Determine components
-    for word in words:
-        if word in sides:
-            side = word
-        elif word in positions:
-            position = word
-        elif word in body_parts:
-            body_part = word
-        elif word in ends:
-            end = word
-
-    # Construct the clean mark
-    clean_mark = '_'.join(filter(None, [position, side, body_part, end]))
-
-    # Handle special cases
-    if body_part == "eye" and side:
-        clean_mark = f"{side}_eye"
-    elif body_part == "antler" and side and end:
-        clean_mark = f"{side}_antler_{end}"
-    elif body_part == "earbase" and side:
-        clean_mark = f"{side}_earbase"
-    elif body_part == "earend" and side:
-        clean_mark = f"{side}_earend"
-
-    # If the constructed mark is in allowed values, return it; otherwise, return the original mark
-    if clean_mark in allowed_values:
-        return clean_mark
-    else:
-        print(f"Warning: '{mark}' could not be mapped to a clean value. Returning original value.", UserWarning)
-        return mark
 
 def map_body_part(mark):
     # Replace 'thai' with 'thigh'
@@ -143,7 +76,7 @@ def map_body_part(mark):
     else:
         print(f"Warning: '{mark}' could not be mapped to a clean value. Returning original value.", UserWarning)
         return mark
-    # Extract trial information from the file name
+def process_file(file_path, output_data):
     file_name = os.path.basename(file_path)
     trial_info = file_name.split('_flattened.csv')[0]
 
@@ -187,11 +120,7 @@ def map_body_part(mark):
             if x_col in row and y_col in row and frame_col in row:
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                     mark = body_part
-                    # First, try the new mapping function
-                    clean_mark = map_to_clean_value(mark)
-                    if clean_mark == "Unknown":
-                        # If the new mapping function returns "Unknown", use the existing function
-                        clean_mark = map_body_part(mark)
+                    clean_mark = map_body_part(mark)
                     if (mark == 'eye' or mark == 'eye_n') and eye_side:
                         # print("    " + eye_side)
                         mark = eye_side
