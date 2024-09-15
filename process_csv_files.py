@@ -9,73 +9,83 @@ mapping_rules = {
 }
 
 
-def map_body_part(mark):
-    # Replace 'thai' with 'thigh'
-    mark = mark.replace('thai', 'thigh')
-    allowed_values = {
-        "nose", "upper_jaw", "lower_jaw", "mouth_end_right", "mouth_end_left",
-        "right_eye", "right_earbase", "right_earend", "right_antler_base", "right_antler_end",
-        "left_eye", "left_earbase", "left_earend", "left_antler_base", "left_antler_end",
-        "neck_base", "neck_end", "throat_base", "throat_end", "back_base", "back_end",
-        "back_middle", "tail_base", "tail_end", "front_left_thai", "front_left_knee",
-        "front_left_paw", "front_right_thai", "front_right_knee", "front_right_paw",
-        "back_left_paw", "back_left_thai", "back_right_thai", "back_left_knee",
-        "back_right_knee", "back_right_paw", "belly_bottom", "body_middle_right",
-        "body_middle_left"
+import re
+
+# General purpose function to categorize body parts
+def detect_body_part_category(value):
+    # Define keywords for front, back, right, left, and body parts
+    front_keywords = ["front"]
+    back_keywords = ["back"]
+    right_keywords = ["right"]
+    left_keywords = ["left"]
+    
+    # Body parts
+    body_part_keywords = [
+        "paw", "thigh", "knee", "eye", "ear", "antler", "nose", "tail", "neck", "back", "mouth", "belly", "body", "throat"
+    ]
+    
+    # Check for front/back
+    position = "Unknown"
+    if any(keyword in value.lower() for keyword in front_keywords):
+        position = "Front"
+    elif any(keyword in value.lower() for keyword in back_keywords):
+        position = "Back"
+    
+    # Check for right/left
+    side = "Unknown"
+    if any(keyword in value.lower() for keyword in right_keywords):
+        side = "Right"
+    elif any(keyword in value.lower() for keyword in left_keywords):
+        side = "Left"
+    
+    # Check for body part
+    body_part = "Unknown"
+    for keyword in body_part_keywords:
+        if keyword in value.lower():
+            body_part = keyword
+            break
+    
+    return {
+        "Original Value": value,
+        "Position": position,
+        "Side": side,
+        "Body Part": body_part
     }
 
-    # If the mark is already clean, return it
-    if mark in allowed_values:
-        return mark
-
-    # Normalize the mark by replacing spaces with underscores and splitting into words
-    words = mark.replace(' ', '_').split('_')
-
-    # Define possible components
-    sides = {"left", "right"}
-    positions = {"front", "back"}
-    body_parts = {
-        "nose", "jaw", "mouth", "eye", "earbase", "earend", "antler", "neck", "throat",
-        "back", "tail", "thai", "knee", "paw", "belly", "body"
-    }
-    ends = {"end", "base", "middle", "bottom"}
-
-    # Initialize components
-    side = None
-    position = None
-    body_part = None
-    end = None
-
-    # Determine components
-    for word in words:
-        if word in sides:
-            side = word
-        elif word in positions:
-            position = word
-        elif word in body_parts:
-            body_part = word
-        elif word in ends:
-            end = word
-
-    # Construct the clean mark
-    clean_mark = '_'.join(filter(None, [position, side, body_part, end]))
-
-    # Handle special cases
-    if body_part == "eye" and side:
-        clean_mark = f"{side}_eye"
-    elif body_part == "antler" and side and end:
-        clean_mark = f"{side}_antler_{end}"
-    elif body_part == "earbase" and side:
-        clean_mark = f"{side}_earbase"
-    elif body_part == "earend" and side:
-        clean_mark = f"{side}_earend"
-
-    # If the constructed mark is in allowed values, return it; otherwise, return the original mark
-    if clean_mark in allowed_values:
-        return clean_mark
-    else:
-        print(f"Warning: '{mark}' could not be mapped to a clean value. Returning original value.", UserWarning)
-        return mark
+# Function to recombine the detected categories into clean values
+def recombine_to_clean_value(value):
+    categories = detect_body_part_category(value)
+    
+    position = categories["Position"]
+    side = categories["Side"]
+    body_part = categories["Body Part"]
+    
+    # Mapping rules to clean the recombined value
+    recombined_value = ""
+    
+    # Add side (if applicable)
+    if side != "Unknown":
+        recombined_value += side.lower() + "_"
+    
+    # Add position for limbs or appendages
+    if position != "Unknown":
+        recombined_value += position.lower() + "_"
+    
+    # Add body part
+    recombined_value += body_part
+    
+    # Final check if body part is "nose", we don't need any position or side
+    if body_part == "nose":
+        recombined_value = "nose"
+    
+    # If tail is involved, use "tail_end" or "tail_base" logic
+    if body_part == "tail":
+        if position == "Back":
+            recombined_value = "tail_base"
+        else:
+            recombined_value = "tail_end"
+    
+    return recombined_value
 def process_file(file_path, output_data):
     file_name = os.path.basename(file_path)
     trial_info = file_name.split('_flattened.csv')[0]
@@ -120,7 +130,7 @@ def process_file(file_path, output_data):
             if x_col in row and y_col in row and frame_col in row:
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                     mark = body_part
-                    clean_mark = map_body_part(mark)
+                    clean_mark = recombine_to_clean_value(mark)
                     if (mark == 'eye' or mark == 'eye_n') and eye_side:
                         # print("    " + eye_side)
                         mark = eye_side
