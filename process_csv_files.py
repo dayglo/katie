@@ -46,7 +46,8 @@ def process_file(file_path, output_data):
                         'x_t': row[x_col],
                         'y_t': row[y_col],
                         'animal': animal_name,  # Add the animal name to the output
-                        'video_number': video_number  # Add the video number to the output
+                        'video_number': video_number,  # Add the video number to the output
+                        'lookupfile': lookupfile  # Add the lookup file path to the output
                     })
 
 def process_all_files(base_dir, output_file):
