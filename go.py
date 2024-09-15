@@ -35,10 +35,10 @@ def process_file(filepath):
             print(line)
 
         data_str = ''.join(data_lines)
-        print("DataFrame after reading data:")
-        print(data.head())
         # Use a flexible approach to handle varying numbers of fields
         data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python', names=range(len(header2)))
+        print("DataFrame after reading data:")
+        print(data.head())
     except pd.errors.ParserError as e:
         print(f"Error parsing file {filepath}: {e}")
         for i, line in enumerate(lines[2:], start=3):
