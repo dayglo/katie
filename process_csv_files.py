@@ -7,7 +7,11 @@ def process_file(file_path, output_data):
     trial_info = file_name.split('_flattened.csv')[0]
 
     # Read the CSV file
-    df = pd.read_csv(file_path)
+    try:
+        df = pd.read_csv(file_path)
+    except pd.errors.EmptyDataError:
+        print(f"Skipping empty file: {file_path}")
+        return
 
     # Extract body part names from the headers
     headers = df.columns
