@@ -66,7 +66,7 @@ def map_body_part(mark):
     if clean_mark in allowed_values:
         return clean_mark
     else:
-        warnings.warn(f"Warning: '{mark}' could not be mapped to a clean value. Returning original value.", UserWarning)
+        print(f"Warning: '{mark}' could not be mapped to a clean value. Returning original value.", UserWarning)
         return mark
 
 def process_file(file_path, output_data):
@@ -115,16 +115,16 @@ def process_file(file_path, output_data):
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                     mark = body_part
                     # Map the body part to the correct value using the new function
-                    print(mark)
+                    # print(mark)
                     if (mark == 'eye' or mark == 'eye_n') and eye_side:
-                        print("    " + eye_side)
+                        # print("    " + eye_side)
                         mark = eye_side
 
                     output_data.append({
                         'frame': int(row[frame_col]),
                         'stance': '',  # Stance is not provided in the input
                         'trial': trial_info,
-                        'mark': mark,
+                        'mark': map_body_part(mark),
                         'x_t': row[x_col],
                         'y_t': row[y_col],
                         'animal': animal_name,  # Add the animal name to the output
