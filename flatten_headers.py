@@ -20,7 +20,10 @@ def flatten_headers(file_path):
     ]
 
     # Process the data lines
-    data_lines = [line.strip().split('\t')[1:] for line in lines[3:]]
+    data_lines = [
+        [value if value else '' for value in line.strip().split('\t')[1:]]
+        for line in lines[3:]
+    ]
 
     # Write the processed data to a new file
     output_file_path = file_path.replace('.txt', '_processed.csv')
