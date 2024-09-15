@@ -11,8 +11,8 @@ def flatten_headers(file_path):
         print(f"File {file_path} does not have enough lines to process headers.")
         return
     print("Flattening headers...")
-    header1 = lines[1].strip().split('\t')[1:]  # Skip the first column
-    header2 = lines[2].strip().split('\t')[1:]  # Skip the first column
+    header1 = lines[0].strip().split('\t')[1:]  # Skip the first column
+    header2 = lines[1].strip().split('\t')[1:]  # Skip the first column
 
     # Create flattened headers
     flattened_headers = [
