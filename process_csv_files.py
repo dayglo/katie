@@ -1,7 +1,66 @@
 import os
 import pandas as pd
 
-def process_file(file_path, output_data):
+def map_body_part(mark):
+    # Define the allowed clean values
+    allowed_values = {
+        "nose", "upper_jaw", "lower_jaw", "mouth_end_right", "mouth_end_left",
+        "right_eye", "right_earbase", "right_earend", "right_antler_base", "right_antler_end",
+        "left_eye", "left_earbase", "left_earend", "left_antler_base", "left_antler_end",
+        "neck_base", "neck_end", "throat_base", "throat_end", "back_base", "back_end",
+        "back_middle", "tail_base", "tail_end", "front_left_thai", "front_left_knee",
+        "front_left_paw", "front_right_thai", "front_right_knee", "front_right_paw",
+        "back_left_paw", "back_left_thai", "back_right_thai", "back_left_knee",
+        "back_right_knee", "back_right_paw", "belly_bottom", "body_middle_right",
+        "body_middle_left"
+    }
+
+    # If the mark is already clean, return it
+    if mark in allowed_values:
+        return mark
+
+    # Split the mark into words
+    words = mark.replace('_', ' ').split()
+
+    # Define possible components
+    sides = {"left", "right"}
+    positions = {"front", "back"}
+    body_parts = {
+        "nose", "jaw", "mouth", "eye", "earbase", "earend", "antler", "neck", "throat",
+        "back", "tail", "thai", "knee", "paw", "belly", "body"
+    }
+
+    # Initialize components
+    side = None
+    position = None
+    body_part = None
+    end = None
+
+    # Determine components
+    for word in words:
+        if word in sides:
+            side = word
+        elif word in positions:
+            position = word
+        elif word in body_parts:
+            body_part = word
+        elif word in {"end", "base", "middle", "bottom"}:
+            end = word
+
+    # Construct the clean mark
+    clean_mark = '_'.join(filter(None, [position, side, body_part, end]))
+
+    # Handle special cases
+    if body_part == "eye" and side:
+        clean_mark = f"{side}_eye"
+    elif body_part == "antler" and side and end:
+        clean_mark = f"{side}_antler_{end}"
+    elif body_part == "earbase" and side:
+        clean_mark = f"{side}_earbase"
+    elif body_part == "earend" and side:
+        clean_mark = f"{side}_earend"
+
+    return clean_mark
     # Extract trial information from the file name
     file_name = os.path.basename(file_path)
     trial_info = file_name.split('_flattened.csv')[0]
