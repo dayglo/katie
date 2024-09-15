@@ -4,11 +4,14 @@ import pandas as pd
 from io import StringIO
 
 def process_file(filepath):
+    print(f"Starting to process file: {filepath}")
     with open(filepath, 'r') as f:
         lines = f.readlines()
 
     # Remove the first line if it contains '#multi:'
     if lines[0].strip().startswith('#multi:'):
+        print("Removing '#multi:' line")
+        print("Removing empty line at the beginning")
         lines = lines[1:]
 
     # Remove empty lines at the beginning
@@ -19,16 +22,21 @@ def process_file(filepath):
     header1 = lines[0].strip().split('\t')[1:]
     header2 = lines[1].strip().split('\t')[1:]
 
+    print(f"Header1: {header1}")
+    print(f"Header2: {header2}")
+
     # Read the data starting from the third line
     try:
         # Remove the first column (t) from each line before parsing
         data_lines = [line.split('\t', 1)[1] for line in lines[2:] if line.strip()]
-        # Debugging: Print the first few processed data lines
+        print("First few processed data lines after removing 't':")
         print("First few processed data lines:")
         for line in data_lines[:5]:
             print(line)
 
         data_str = ''.join(data_lines)
+        print("DataFrame after reading data:")
+        print(data.head())
         # Use a flexible approach to handle varying numbers of fields
         data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python', names=range(len(header2)))
     except pd.errors.ParserError as e:
@@ -38,7 +46,8 @@ def process_file(filepath):
             print(f"Line {i}: {fields} (fields: {len(fields)})")
         raise
 
-    # Remove the first column (t)
+    print("DataFrame after removing the first column (t):")
+    print(data.head())
     data = data.iloc[:, 1:]
 
     # Ensure the headers match the number of data columns
@@ -67,7 +76,8 @@ def process_file(filepath):
     elif len(combined_headers) < n:
         combined_headers += ['Unnamed'] * (n - len(combined_headers))
 
-    # Assign the combined headers to the DataFrame
+    print("DataFrame with combined headers:")
+    print(data.head())
     data.columns = combined_headers
 
     # Add body part prefixes to x, y, and frame columns
@@ -81,6 +91,9 @@ def process_file(filepath):
 
     # Drop rows that are completely empty
     data = data.dropna(how='all')
+
+    print("Final DataFrame after dropping empty rows:")
+    print(data.head())
 
     return data
 
