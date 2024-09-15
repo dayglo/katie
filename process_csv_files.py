@@ -21,7 +21,8 @@ def process_file(file_path, output_data):
             y_col = f'{body_part}_y'
             frame_col = f'{body_part}_frame'
 
-            if pd.notna(row[x_col]) and pd.notna(row[y_col]):
+            # Check if all necessary data is present
+            if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                 output_data.append({
                     'frame': int(row[frame_col]),
                     'stance': '',  # Stance is not provided in the input
