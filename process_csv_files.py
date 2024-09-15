@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import warnings
 
 def map_body_part(mark):
     # Define the allowed clean values
@@ -62,7 +63,11 @@ def map_body_part(mark):
         clean_mark = f"{side}_earend"
 
     # If the constructed mark is in allowed values, return it; otherwise, return the original mark
-    return clean_mark if clean_mark in allowed_values else mark
+    if clean_mark in allowed_values:
+        return clean_mark
+    else:
+        warnings.warn(f"Warning: '{mark}' could not be mapped to a clean value. Returning original value.", UserWarning)
+        return mark
 
 def process_file(file_path, output_data):
     # Extract trial information from the file name
