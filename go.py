@@ -23,6 +23,11 @@ def process_file(filepath):
     try:
         # Remove the first column (t) from each line before parsing
         data_lines = [line.split('\t', 1)[1] for line in lines[2:] if line.strip()]
+        # Debugging: Print the first few processed data lines
+        print("First few processed data lines:")
+        for line in data_lines[:5]:
+            print(line)
+
         data_str = ''.join(data_lines)
         data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python')
     except pd.errors.ParserError as e:
