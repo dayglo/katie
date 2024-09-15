@@ -46,13 +46,23 @@ def process_file(filepath):
             combined_header = 'Unnamed'
         combined_headers.append(combined_header)
 
+    # Adjust the number of headers to match the data columns
+    if len(combined_headers) > n:
+        combined_headers = combined_headers[:n]
+    elif len(combined_headers) < n:
+        combined_headers += ['Unnamed'] * (n - len(combined_headers))
+
     # Assign the combined headers to the DataFrame
     data.columns = combined_headers
 
     # Add body part prefixes to x, y, and frame columns
     for i, body_part in enumerate(header1):
         if body_part:
-            data.columns = [f"{body_part}_{col}" if col.startswith(('x', 'y', 'frame')) else col for col in data.columns[i*3:(i+1)*3]]  # Adjust slicing based on column groups
+            start_idx = i * 3
+            end_idx = min(start_idx + 3, len(data.columns))
+            for j in range(start_idx, end_idx):
+                if data.columns[j].startswith(('x', 'y', 'frame')):
+                    data.columns.values[j] = f"{body_part}_{data.columns[j]}"
 
     # Drop rows that are completely empty
     data = data.dropna(how='all')
