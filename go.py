@@ -43,11 +43,10 @@ def process_file(filepath):
                 else:
                     debug_print(f"Skipping line {i} due to incorrect field count: {len(fields)}")
         debug_print("First few processed data lines after removing 't':")
-        debug_print("First few processed data lines:")
         for line in data_lines[:5]:
             debug_print(line)
 
-        data_str = ''.join(data_lines)
+        data_str = '\n'.join(data_lines)  # Join lines with newline characters
         # Use a flexible approach to handle varying numbers of fields
         data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python', names=range(len(header2)))
         debug_print("DataFrame after reading data:")
