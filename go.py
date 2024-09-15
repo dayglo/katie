@@ -21,7 +21,7 @@ def process_file(filepath):
     
     # Read the data starting from the third line
     data_str = ''.join(lines[2:])
-    data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python')
+    data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python', error_bad_lines=False)
     
     # Remove the first column (t)
     data = data.iloc[:, 1:]
