@@ -5,7 +5,10 @@ def flatten_headers(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
-    # Remove the first line and split the next two lines for headers
+    # Ensure there are enough lines to process headers
+    if len(lines) < 3:
+        print(f"File {file_path} does not have enough lines to process headers.")
+        return
     header1 = lines[1].strip().split('\t')[1:]  # Skip the first column
     header2 = lines[2].strip().split('\t')[1:]  # Skip the first column
 
