@@ -56,7 +56,13 @@ def flatten_headers(file_path, output_path):
         for i, cell in enumerate(row):
             if not skip_columns[i]:
                 new_row.append(cell.strip() if cell.strip() else '')
-        data_rows.append(new_row)
+        # Check if the row has only data in the 't' column
+        if len(new_row) == 1 and new_header[0] == 't' and new_row[0]:
+            continue  # Skip this row
+
+        # Add the row only if it's not empty
+        if any(new_row):
+            data_rows.append(new_row)
 
     # Write output to new file
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
