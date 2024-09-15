@@ -61,6 +61,8 @@ def map_body_part(mark):
         clean_mark = f"{side}_earend"
 
     return clean_mark
+
+def process_file(file_path, output_data):
     # Extract trial information from the file name
     file_name = os.path.basename(file_path)
     trial_info = file_name.split('_flattened.csv')[0]
@@ -93,6 +95,7 @@ def map_body_part(mark):
         eye_side = 'right_eye'
     else:
         eye_side = None
+
     for index, row in df.iterrows():
         # Iterate over each body part
         for body_part in body_parts:
