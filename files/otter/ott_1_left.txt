@@ -1,6 +1,5 @@
 #multi:
-	f_l_p			b_l_p			
-t	x	y	frame	x	y	frame	
+	f_l_p_x	f_l_p_y	f_l_p_frame	b_l_p_x	b_l_p_y	b_l_p_frame
 0.267	46.36	-117.3	32			
 			
 0.642	48.49	-116.3	77							
