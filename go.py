@@ -21,7 +21,14 @@ def process_file(filepath):
 
     # Read the data starting from the third line
     data_str = ''.join(lines[2:])
-    data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python')
+    try:
+        data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python')
+    except pd.errors.ParserError as e:
+        print(f"Error parsing file {filepath}: {e}")
+        for i, line in enumerate(lines[2:], start=3):
+            fields = line.strip().split('\t')
+            print(f"Line {i}: {fields} (fields: {len(fields)})")
+        raise
 
     # Remove the first column (t)
     data = data.iloc[:, 1:]
