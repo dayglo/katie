@@ -23,12 +23,12 @@ def flatten_headers(file_path):
     data_lines = [line.strip().split('\t')[1:] for line in lines[3:]]
 
     # Write the processed data to a new file
-    output_file_path = file_path.replace('.txt', '_processed.txt')
+    output_file_path = file_path.replace('.txt', '_processed.csv')
     print(f"Writing processed data to {output_file_path}...")
     with open(output_file_path, 'w') as file:
-        file.write('\t'.join(flattened_headers) + '\n')
+        file.write(','.join(flattened_headers) + '\n')
         for data_line in data_lines:
-            file.write('\t'.join(data_line) + '\n')
+            file.write(','.join(data_line) + '\n')
 
 def process_files(directory):
     for root, _, files in os.walk(directory):
