@@ -75,7 +75,7 @@ def main():
         animal_path = os.path.join(base_directory, animal_dir)
         
         # Only proceed if it's a directory
-        if os.path.isdir(animal_path):
+        if os.path.isdir(animal_path) and not animal_dir.startswith('.'):
             print(f"Processing animal type: {animal_dir}")
             
             # Define the file patterns to look for
