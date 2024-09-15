@@ -3,15 +3,20 @@ import glob
 import pandas as pd
 from io import StringIO
 
+# Function to handle debug printing
+def debug_print(message):
+    if os.getenv('DEBUG', '0') == '1':
+        print(message)
+
 def process_file(filepath):
-    print(f"Starting to process file: {filepath}")
+    debug_print(f"Starting to process file: {filepath}")
     with open(filepath, 'r') as f:
         lines = f.readlines()
 
     # Remove the first line if it contains '#multi:'
     if lines[0].strip().startswith('#multi:'):
-        print("Removing '#multi:' line")
-        print("Removing empty line at the beginning")
+        debug_print("Removing '#multi:' line")
+        debug_print("Removing empty line at the beginning")
         lines = lines[1:]
 
     # Remove empty lines at the beginning
@@ -22,8 +27,8 @@ def process_file(filepath):
     header1 = lines[0].strip().split('\t')[1:]
     header2 = lines[1].strip().split('\t')[1:]
 
-    print(f"Header1: {header1}")
-    print(f"Header2: {header2}")
+    debug_print(f"Header1: {header1}")
+    debug_print(f"Header2: {header2}")
 
     # Read the data starting from the third line
     try:
@@ -36,26 +41,26 @@ def process_file(filepath):
                 if len(fields) == expected_fields + 1:  # +1 because we removed the first column (t)
                     data_lines.append(fields[1])  # Append the line without the first column
                 else:
-                    print(f"Skipping line {i} due to incorrect field count: {len(fields)}")
-        print("First few processed data lines after removing 't':")
-        print("First few processed data lines:")
+                    debug_print(f"Skipping line {i} due to incorrect field count: {len(fields)}")
+        debug_print("First few processed data lines after removing 't':")
+        debug_print("First few processed data lines:")
         for line in data_lines[:5]:
-            print(line)
+            debug_print(line)
 
         data_str = ''.join(data_lines)
         # Use a flexible approach to handle varying numbers of fields
         data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python', names=range(len(header2)))
-        print("DataFrame after reading data:")
-        print(data.head())
+        debug_print("DataFrame after reading data:")
+        debug_print(data.head())
     except pd.errors.ParserError as e:
-        print(f"Error parsing file {filepath}: {e}")
+        debug_print(f"Error parsing file {filepath}: {e}")
         for i, line in enumerate(lines[2:], start=3):
             fields = line.strip().split('\t')
-            print(f"Line {i}: {fields} (fields: {len(fields)})")
+            debug_print(f"Line {i}: {fields} (fields: {len(fields)})")
         raise
 
-    print("DataFrame after removing the first column (t):")
-    print(data.head())
+    debug_print("DataFrame after removing the first column (t):")
+    debug_print(data.head())
     data = data.iloc[:, 1:]
 
     # Ensure the headers match the number of data columns
@@ -84,8 +89,8 @@ def process_file(filepath):
     elif len(combined_headers) < n:
         combined_headers += ['Unnamed'] * (n - len(combined_headers))
 
-    print("DataFrame with combined headers:")
-    print(data.head())
+    debug_print("DataFrame with combined headers:")
+    debug_print(data.head())
     data.columns = combined_headers
 
     # Add body part prefixes to x, y, and frame columns
@@ -100,8 +105,8 @@ def process_file(filepath):
     # Drop rows that are completely empty
     data = data.dropna(how='all')
 
-    print("Final DataFrame after dropping empty rows:")
-    print(data.head())
+    debug_print("Final DataFrame after dropping empty rows:")
+    debug_print(data.head())
 
     return data
 
@@ -115,7 +120,7 @@ def main():
 
         # Only proceed if it's a directory
         if os.path.isdir(animal_path):
-            print(f"Processing animal type: {animal_dir}")
+            debug_print(f"Processing animal type: {animal_dir}")
 
             # Define the file patterns to look for
             patterns = ['ott_*.txt', 'otter_*.txt']  # Adjust based on expected file patterns
@@ -136,9 +141,9 @@ def main():
 
                     # Save the processed DataFrame to a new CSV file
                     df.to_csv(output_filepath, index=False)  # Default is comma-separated for CSV
-                    print(f"Processed {filename} and saved to {output_filename}")
+                    debug_print(f"Processed {filename} and saved to {output_filename}")
                 except Exception as e:
-                    print(f"Failed to process {filepath}: {e}")
+                    debug_print(f"Failed to process {filepath}: {e}")
 
 if __name__ == "__main__":
     main()
