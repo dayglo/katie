@@ -57,7 +57,7 @@ def flatten_headers(file_path, output_path):
             if not skip_columns[i]:
                 new_row.append(cell.strip() if cell.strip() else '')
         # Check if the row has only data in the 't' column
-        if len(new_row) == 1 and new_header[0] == 't' and new_row[0]:
+        if len(new_row) > 1 and all(cell == '' for cell in new_row[1:]):
             continue  # Skip this row
 
         # Add the row only if it's not empty
