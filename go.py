@@ -50,13 +50,10 @@ def process_file(filepath):
     
     # Combine the headers with the desired format
     combined_headers = []
-    for i in range(0, len(header1), 3):
+    for i in range(len(header1)):
         part_name = header1[i].strip() if header1[i].strip() else 'Unnamed'
-        combined_headers.extend([
-            f"{part_name}_x",
-            f"{part_name}_y",
-            f"{part_name}_frame"
-        ])
+        suffix = header2[i].strip() if header2[i].strip() else 'Unnamed'
+        combined_headers.append(f"{part_name}_{suffix}")
     
     # Assign the combined headers to the DataFrame
     data.columns = combined_headers
