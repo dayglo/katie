@@ -29,7 +29,8 @@ def flatten_headers(file_path):
 def process_files(directory):
     for root, _, files in os.walk(directory):
         for file in files:
-            if file.endswith('.txt'):
+            # Check if the file matches the pattern <shortened_animal_name>_<video_number>_<animal_side>.txt
+            if file.endswith('.txt') and len(file.split('_')) == 3:
                 file_path = os.path.join(root, file)
                 flatten_headers(file_path)
 
