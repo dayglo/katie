@@ -6,6 +6,9 @@ def process_file(file_path, output_data):
     file_name = os.path.basename(file_path)
     trial_info = file_name.split('_flattened.csv')[0]
 
+    # Extract animal name from the directory structure
+    animal_name = os.path.basename(os.path.dirname(file_path))
+
     # Read the CSV file
     try:
         df = pd.read_csv(file_path)
@@ -34,7 +37,8 @@ def process_file(file_path, output_data):
                         'trial': trial_info,
                         'mark': body_part,
                         'x_t': row[x_col],
-                        'y_t': row[y_col]
+                        'y_t': row[y_col],
+                        'animal': animal_name  # Add the animal name to the output
                     })
 
 def process_all_files(base_dir, output_file):
