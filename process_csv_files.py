@@ -104,7 +104,7 @@ def map_body_part(mark):
             if x_col in row and y_col in row and frame_col in row:
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                     mark = body_part
-                    # Change 'eye' or 'eye_n' to the appropriate eye side
+                    # Map the body part to the correct value using the new function
                     print(mark)
                     if (mark == 'eye' or mark == 'eye_n') and eye_side:
                         print("    " + eye_side)
