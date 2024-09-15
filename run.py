@@ -45,10 +45,14 @@ def flatten_headers(file_path, output_path):
     data_rows = []
     for row in lines[3:]:
         # Extend row to match header length if necessary
-        while len(row) < len(skip_columns):
+        while len(row) < len(new_header):
             row.append('')
 
-        new_row = []
+        # Ensure skip_columns matches the length of the row
+        if len(skip_columns) < len(row):
+            skip_columns.extend([True] * (len(row) - len(skip_columns)))
+
+        new_row = []        
         for i, cell in enumerate(row):
             if not skip_columns[i]:
                 new_row.append(cell.strip() if cell.strip() else '')
