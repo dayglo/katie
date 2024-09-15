@@ -53,7 +53,7 @@ def process_file(file_path, output_data):
                         'frame': int(row[frame_col]),
                         'stance': '',  # Stance is not provided in the input
                         'trial': trial_info,
-                        'mark': body_part,
+                        'mark': mark,
                         'x_t': row[x_col],
                         'y_t': row[y_col],
                         'animal': animal_name,  # Add the animal name to the output
