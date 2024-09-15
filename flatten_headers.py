@@ -23,7 +23,7 @@ def flatten_headers(file_path):
     # Process the data lines, skipping the first column
     data_lines = [
         [value if value else '' for value in line.strip().split('\t')[1:]]  # Skip the first column
-        for line in lines[3:]
+        for line in lines[2:]
     ]
 
     # Write the processed data to a new file
