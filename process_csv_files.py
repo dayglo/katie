@@ -2,7 +2,9 @@ import os
 import pandas as pd
 import warnings
 
-def map_body_part(mark):
+# Function to map messy values to clean values
+def map_to_clean_value(messy_value):
+    return mapping_rules.get(messy_value, "Unknown")
     # Replace 'thai' with 'thigh'
     mark = mark.replace('thai', 'thigh')
     allowed_values = {
@@ -115,8 +117,11 @@ def process_file(file_path, output_data):
             if x_col in row and y_col in row and frame_col in row:
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                     mark = body_part
-                    # Map the body part to the correct value using the new function
-                    # print(mark)
+                    # First, try the new mapping function
+                    clean_mark = map_to_clean_value(mark)
+                    if clean_mark == "Unknown":
+                        # If the new mapping function returns "Unknown", use the existing function
+                        clean_mark = map_body_part(mark)
                     if (mark == 'eye' or mark == 'eye_n') and eye_side:
                         # print("    " + eye_side)
                         mark = eye_side
