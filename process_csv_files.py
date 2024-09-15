@@ -46,7 +46,9 @@ def process_file(file_path, output_data):
                 if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
                     mark = body_part
                     # Change 'eye' or 'eye_n' to the appropriate eye side
+                    print(mark)
                     if (mark == 'eye' or mark == 'eye_n') and eye_side:
+                        print("    " + eye_side)
                         mark = eye_side
 
                     output_data.append({
