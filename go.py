@@ -31,20 +31,15 @@ def process_file(filepath):
     header1 += [''] * (n - len(header1))
     header2 += [''] * (n - len(header2))
     
-    # Combine the headers
+    # Combine the headers with the desired format
     combined_headers = []
-    for h1, h2 in zip(header1, header2):
-        h1 = h1.strip()
-        h2 = h2.strip()
-        if h1 and h2:
-            combined_header = f"{h1}_{h2}"
-        elif h1:
-            combined_header = h1
-        elif h2:
-            combined_header = h2
-        else:
-            combined_header = 'Unnamed'
-        combined_headers.append(combined_header)
+    for i in range(0, len(header1), 3):
+        part_name = header1[i].strip() if header1[i].strip() else 'Unnamed'
+        combined_headers.extend([
+            f"{part_name}_x",
+            f"{part_name}_y",
+            f"{part_name}_frame"
+        ])
     
     # Assign the combined headers to the DataFrame
     data.columns = combined_headers
