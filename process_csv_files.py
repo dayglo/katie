@@ -11,7 +11,7 @@ def process_file(file_path, output_data):
 
     # Extract body part names from the headers
     headers = df.columns
-    body_parts = [header.rsplit('_', 1)[0] for header in headers if '_x' in header]
+    body_parts = set(header.rsplit('_', 1)[0] for header in headers if '_x' in header)
 
     # Iterate over each row in the DataFrame
     for index, row in df.iterrows():
@@ -21,16 +21,17 @@ def process_file(file_path, output_data):
             y_col = f'{body_part}_y'
             frame_col = f'{body_part}_frame'
 
-            # Check if all necessary data is present
-            if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
-                output_data.append({
-                    'frame': int(row[frame_col]),
-                    'stance': '',  # Stance is not provided in the input
-                    'trial': trial_info,
-                    'mark': body_part,
-                    'x_t': row[x_col],
-                    'y_t': row[y_col]
-                })
+            # Check if all necessary data is present and columns exist
+            if x_col in row and y_col in row and frame_col in row:
+                if pd.notna(row[x_col]) and pd.notna(row[y_col]) and pd.notna(row[frame_col]):
+                    output_data.append({
+                        'frame': int(row[frame_col]),
+                        'stance': '',  # Stance is not provided in the input
+                        'trial': trial_info,
+                        'mark': body_part,
+                        'x_t': row[x_col],
+                        'y_t': row[y_col]
+                    })
 
 def process_all_files(base_dir, output_file):
     output_data = []
