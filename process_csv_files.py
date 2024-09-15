@@ -3,7 +3,8 @@ import pandas as pd
 import warnings
 
 def map_body_part(mark):
-    # Define the allowed clean values
+    # Replace 'thai' with 'thigh'
+    mark = mark.replace('thai', 'thigh')
     allowed_values = {
         "nose", "upper_jaw", "lower_jaw", "mouth_end_right", "mouth_end_left",
         "right_eye", "right_earbase", "right_earend", "right_antler_base", "right_antler_end",
