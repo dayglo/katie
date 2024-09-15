@@ -2,17 +2,26 @@ import os
 import pandas as pd
 
 def flatten_headers(file_path):
-    # Read the file, skipping the first line and using the first two rows as headers
-    df = pd.read_csv(file_path, sep='\t', skiprows=1, header=[0, 1])
-    
-    # Flatten the multi-level column headers
-    df.columns = ['_'.join(filter(None, col)).strip() for col in df.columns]
-    
-    # Drop the first column (t)
-    df.drop(columns=df.columns[0], inplace=True)
-    
-    # Write the modified DataFrame back to the file
-    df.to_csv(file_path, sep='\t', index=False)
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Remove the first line and split the next two lines for headers
+    header1 = lines[1].strip().split('\t')[1:]  # Skip the first column
+    header2 = lines[2].strip().split('\t')[1:]  # Skip the first column
+
+    # Create flattened headers
+    flattened_headers = [
+        f"{h1}_{h2}" for h1, h2 in zip(header1, header2)
+    ]
+
+    # Process the data lines
+    data_lines = [line.strip().split('\t')[1:] for line in lines[3:]]
+
+    # Write the processed data back to the file
+    with open(file_path, 'w') as file:
+        file.write('\t'.join(flattened_headers) + '\n')
+        for data_line in data_lines:
+            file.write('\t'.join(data_line) + '\n')
 
 def process_files(directory):
     for root, _, files in os.walk(directory):
