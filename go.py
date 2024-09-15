@@ -28,7 +28,15 @@ def process_file(filepath):
     # Read the data starting from the third line
     try:
         # Remove the first column (t) from each line before parsing
-        data_lines = [line.split('\t', 1)[1] for line in lines[2:] if line.strip()]
+        expected_fields = len(header2)
+        data_lines = []
+        for i, line in enumerate(lines[2:], start=3):
+            if line.strip():
+                fields = line.split('\t')
+                if len(fields) == expected_fields + 1:  # +1 because we removed the first column (t)
+                    data_lines.append(fields[1])  # Append the line without the first column
+                else:
+                    print(f"Skipping line {i} due to incorrect field count: {len(fields)}")
         print("First few processed data lines after removing 't':")
         print("First few processed data lines:")
         for line in data_lines[:5]:
