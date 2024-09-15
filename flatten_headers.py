@@ -20,9 +20,9 @@ def flatten_headers(file_path):
         for h1, h2 in zip_longest(header1, header2, fillvalue='')
     ]
 
-    # Process the data lines
+    # Process the data lines, skipping the first column
     data_lines = [
-        [value if value else '' for value in line.strip().split('\t')[1:]]
+        [value if value else '' for value in line.strip().split('\t')[1:]]  # Skip the first column
         for line in lines[3:]
     ]
 
