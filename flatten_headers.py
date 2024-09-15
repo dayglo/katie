@@ -1,5 +1,5 @@
 import os
-import pandas as pd
+from itertools import zip_longest
 
 def flatten_headers(file_path):
     print(f"Processing file: {file_path}")
@@ -16,7 +16,8 @@ def flatten_headers(file_path):
 
     # Create flattened headers
     flattened_headers = [
-        f"{h1}_{h2}" for h1, h2 in zip(header1, header2)
+        f"{h1}_{h2}" if h1 and h2 else (h1 or h2 or '') 
+        for h1, h2 in zip_longest(header1, header2, fillvalue='')
     ]
 
     # Process the data lines
