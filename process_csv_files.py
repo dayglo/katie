@@ -9,6 +9,10 @@ def process_file(file_path, output_data):
     # Extract animal name from the directory structure
     animal_name = os.path.basename(os.path.dirname(file_path))
 
+    # Extract video number from the trial information
+    # Assuming the format is something like 'hyn_01_left', 'ott_02_right', etc.
+    video_number = trial_info.split('_')[1].lstrip('0')  # Remove leading zeros
+
     # Read the CSV file
     try:
         df = pd.read_csv(file_path)
@@ -38,7 +42,8 @@ def process_file(file_path, output_data):
                         'mark': body_part,
                         'x_t': row[x_col],
                         'y_t': row[y_col],
-                        'animal': animal_name  # Add the animal name to the output
+                        'animal': animal_name,  # Add the animal name to the output
+                        'video_number': video_number  # Add the video number to the output
                     })
 
 def process_all_files(base_dir, output_file):
