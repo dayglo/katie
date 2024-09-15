@@ -20,8 +20,10 @@ def process_file(filepath):
     header2 = lines[1].strip().split('\t')[1:]
 
     # Read the data starting from the third line
-    data_str = ''.join(lines[2:])
     try:
+        # Remove the first column (t) from each line before parsing
+        data_lines = [line.split('\t', 1)[1] for line in lines[2:] if line.strip()]
+        data_str = ''.join(data_lines)
         data = pd.read_csv(StringIO(data_str), sep='\t', header=None, engine='python')
     except pd.errors.ParserError as e:
         print(f"Error parsing file {filepath}: {e}")
