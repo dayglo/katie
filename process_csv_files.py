@@ -63,13 +63,13 @@ def recombine_to_clean_value(value):
     # Mapping rules to clean the recombined value
     recombined_value = ""
     
-    # Add side (if applicable)
-    if side != "Unknown":
-        recombined_value += side.lower() + "_"
-    
     # Add position for limbs or appendages
     if position != "Unknown":
         recombined_value += position.lower() + "_"
+    
+    # Add side (if applicable)
+    if side != "Unknown":
+        recombined_value += side.lower() + "_"
     
     # Add body part
     recombined_value += body_part
