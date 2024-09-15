@@ -39,7 +39,7 @@ def process_file(filepath):
             if line.strip():
                 fields = line.split('\t')
                 if len(fields) == expected_fields + 1:  # +1 because we removed the first column (t)
-                    data_lines.append(fields[1])  # Append the line without the first column
+                    data_lines.append('\t'.join(fields[1:]))  # Append the line without the first column
                 else:
                     debug_print(f"Skipping line {i} due to incorrect field count: {len(fields)}")
         debug_print("First few processed data lines after removing 't':")
