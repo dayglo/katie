@@ -19,8 +19,8 @@ def map_body_part(mark):
     if mark in allowed_values:
         return mark
 
-    # Split the mark into words
-    words = mark.replace('_', ' ').split()
+    # Normalize the mark by replacing spaces with underscores and splitting into words
+    words = mark.replace(' ', '_').split('_')
 
     # Define possible components
     sides = {"left", "right"}
@@ -29,6 +29,7 @@ def map_body_part(mark):
         "nose", "jaw", "mouth", "eye", "earbase", "earend", "antler", "neck", "throat",
         "back", "tail", "thai", "knee", "paw", "belly", "body"
     }
+    ends = {"end", "base", "middle", "bottom"}
 
     # Initialize components
     side = None
@@ -44,7 +45,7 @@ def map_body_part(mark):
             position = word
         elif word in body_parts:
             body_part = word
-        elif word in {"end", "base", "middle", "bottom"}:
+        elif word in ends:
             end = word
 
     # Construct the clean mark
@@ -60,7 +61,8 @@ def map_body_part(mark):
     elif body_part == "earend" and side:
         clean_mark = f"{side}_earend"
 
-    return clean_mark
+    # If the constructed mark is in allowed values, return it; otherwise, return the original mark
+    return clean_mark if clean_mark in allowed_values else mark
 
 def process_file(file_path, output_data):
     # Extract trial information from the file name
