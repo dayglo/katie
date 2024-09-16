@@ -25,8 +25,6 @@ def read_frame_lookup(file_path):
         # Process each row in the CSV
         for row in reader:
             frame = int(row[0])
-            data[frame] = {}
-            
             # Iterate over body parts and their corresponding x, y, likelihood
             for i in range(0, len(body_parts), 3):
                 body_part = body_parts[i]
