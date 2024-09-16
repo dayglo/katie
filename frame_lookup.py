@@ -35,8 +35,8 @@ def read_frame_lookup(file_path):
                 data[frame][body_part] = (x, y)
     
     # Print summary
-    for frame, body_parts in data.items():
-        print(f"{Fore.CYAN}Frame {frame} has data for body parts: {', '.join(body_parts.keys())}{Style.RESET_ALL}")
+    # for frame, body_parts in data.items():
+    #     print(f"{Fore.CYAN}Frame {frame} has data for body parts: {', '.join(body_parts.keys())}{Style.RESET_ALL}")
         
     return data
 
@@ -50,8 +50,6 @@ if __name__ == "__main__":
     body_part = sys.argv[3]
 
     frame_data = read_frame_lookup(filename)
-
-    print(frame_data[0])
 
     if frame in frame_data and body_part in frame_data[frame]:
         x, y = frame_data[frame][body_part]

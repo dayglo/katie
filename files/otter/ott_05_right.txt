@@ -1,5 +1,5 @@
 #multi:
-	front right paw			front right knee			front right thigh			tail			back right paw			back right knee			back right thigh			eye			nosa			
+	front right paw			front right knee			front right thigh			tail			back right paw			back right knee			back right thigh			eye			nose			
 t	x	y	frame	x	y	frame	x	y	frame	x	y	frame	x	y	frame	x	y	frame	x	y	frame	x	y	frame	x	y	frame	
 0.083	429.7	-198.0	10	390.6	-193.5	10	372.4	-148.0	10	150.2	-102.4	10										470.7	-126.1	10	484.4	-138.9	10
 0.092																											

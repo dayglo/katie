@@ -1,14 +1,6 @@
 import os
 import pandas as pd
 import warnings
-
-# Define mapping rules
-mapping_rules = {
-    # Add your mapping rules here
-    # Example: "messy_value": "clean_value"
-}
-
-
 import re
 
 # General purpose function to categorize body parts

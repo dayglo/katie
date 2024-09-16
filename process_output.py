@@ -33,7 +33,7 @@ def process_output_csv(input_csv, output_csv):
             # Get the new x and y values
             if frame in frame_data and body_part in frame_data[frame]:
                 new_x, new_y = frame_data[frame][body_part]
-                print(f"{Fore.CYAN}Frame {frame}, Body Part '{body_part}': new_x = {new_x}, new_y = {new_y} from {lookup_file}{Style.RESET_ALL}")
+                # print(f"{Fore.CYAN}Frame {frame}, Body Part '{body_part}': new_x = {new_x}, new_y = {new_y} from {lookup_file}{Style.RESET_ALL}")
             else:
                 print(f"{Fore.RED}Data not found for Frame {frame}, Body Part '{body_part}' in {lookup_file}.{Style.RESET_ALL}")
                 new_x, new_y = None, None

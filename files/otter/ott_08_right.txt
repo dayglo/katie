@@ -1,5 +1,5 @@
 #multi:
-	nose			front right paw			front back paw			
+	nose			front right paw			front left paw			
 t	x	y	frame	x	y	frame	x	y	frame	
 0.442	527.2	-64.21	53	542.6	-93.34	53			
 0.450									
