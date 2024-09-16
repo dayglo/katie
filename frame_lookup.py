@@ -1,7 +1,12 @@
 import csv
 import sys
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
 
 def read_frame_lookup(file_path):
+    print(f"{Fore.GREEN}Processing file: {file_path}{Style.RESET_ALL}")
     data = {}
 
     with open(file_path, mode='r') as file:
@@ -27,6 +32,8 @@ def read_frame_lookup(file_path):
                 x = float(row[i + 1])
                 y = float(row[i + 2])
                 # likelihood = float(row[i + 3])  # If you need likelihood, you can include it
+
+                print(f"{Fore.CYAN}Frame {frame}, Body Part '{body_part}': x = {x}, y = {y}{Style.RESET_ALL}")
                 
                 data[frame][body_part] = (x, y)
     
@@ -45,6 +52,6 @@ if __name__ == "__main__":
 
     if frame in frame_data and body_part in frame_data[frame]:
         x, y = frame_data[frame][body_part]
-        print(f"Frame {frame}, Body Part '{body_part}': x = {x}, y = {y}")
+        print(f"{Fore.YELLOW}Frame {frame}, Body Part '{body_part}': x = {x}, y = {y}{Style.RESET_ALL}")
     else:
-        print(f"Data not found for Frame {frame}, Body Part '{body_part}'.")
+        print(f"{Fore.RED}Data not found for Frame {frame}, Body Part '{body_part}'.{Style.RESET_ALL}")
