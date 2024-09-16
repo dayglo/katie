@@ -1,5 +1,6 @@
 import csv
 import sys
+from collections import defaultdict
 from colorama import init, Fore, Style
 
 # Initialize colorama
@@ -7,7 +8,7 @@ init(autoreset=True)
 
 def read_frame_lookup(file_path):
     print(f"{Fore.GREEN}Processing file: {file_path}{Style.RESET_ALL}")
-    data = {}
+    data = defaultdict(list)
 
     with open(file_path, mode='r') as file:
         reader = csv.reader(file)
@@ -33,10 +34,13 @@ def read_frame_lookup(file_path):
                 y = float(row[i + 2])
                 # likelihood = float(row[i + 3])  # If you need likelihood, you can include it
 
-                print(f"{Fore.CYAN}Frame {frame}, Body Part '{body_part}': x = {x}, y = {y}{Style.RESET_ALL}")
-                
-                data[frame][body_part] = (x, y)
+                data[body_part].append((frame, x, y))
     
+    # Print summary
+    for body_part, values in data.items():
+        frames = [v[0] for v in values]
+        print(f"{Fore.CYAN}{len(values)} values collected for {body_part} from {file_path}, from frames {', '.join(map(str, frames))}{Style.RESET_ALL}")
+        
     return data
 
 if __name__ == "__main__":
