@@ -106,8 +106,10 @@ def process_file(file_path, output_data):
     # Read the CSV file
     try:
         df = pd.read_csv(file_path)
+        print(f"Processing file: {file_path} with {len(df)} rows")
     except pd.errors.EmptyDataError:
         print(f"Skipping empty file: {file_path}")
+        return
         return
 
     # Extract body part names from the headers
@@ -165,6 +167,7 @@ def process_all_files(base_dir, output_file):
 
     # Save the output DataFrame to a CSV file
     output_df.to_csv(output_file, index=False)
+    print(f"Processing complete. Output saved to {output_file}")
 
 # Define the base directory and output file
 base_dir = './files'
