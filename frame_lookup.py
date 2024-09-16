@@ -8,7 +8,7 @@ init(autoreset=True)
 
 def read_frame_lookup(file_path):
     print(f"{Fore.GREEN}Processing file: {file_path}{Style.RESET_ALL}")
-    data = defaultdict(list)
+    data = defaultdict(lambda: defaultdict(tuple))
 
     with open(file_path, mode='r') as file:
         reader = csv.reader(file)
@@ -32,12 +32,11 @@ def read_frame_lookup(file_path):
                 y = float(row[i + 2])
                 # likelihood = float(row[i + 3])  # If you need likelihood, you can include it
 
-                data[body_part].append((frame, x, y))
+                data[frame][body_part] = (x, y)
     
     # Print summary
-    for body_part, values in data.items():
-        frames = [v[0] for v in values]
-        print(f"{Fore.CYAN}{len(values)} values collected for {body_part} from {file_path}, from frames {', '.join(map(str, frames))}{Style.RESET_ALL}")
+    for frame, body_parts in data.items():
+        print(f"{Fore.CYAN}Frame {frame} has data for body parts: {', '.join(body_parts.keys())}{Style.RESET_ALL}")
         
     return data
 
