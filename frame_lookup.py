@@ -37,7 +37,7 @@ def read_frame_lookup(file_path):
     # Print summary
     for body_part, values in data.items():
         frames = [v[0] for v in values]
-        # print(f"{Fore.CYAN}{len(values)} values collected for {body_part} from {file_path}, from frames {', '.join(map(str, frames))}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}{len(values)} values collected for {body_part} from {file_path}, from frames {', '.join(map(str, frames))}{Style.RESET_ALL}")
         
     return data
 
@@ -51,6 +51,8 @@ if __name__ == "__main__":
     body_part = sys.argv[3]
 
     frame_data = read_frame_lookup(filename)
+
+    print(frame_data[0])
 
     if frame in frame_data and body_part in frame_data[frame]:
         x, y = frame_data[frame][body_part]
