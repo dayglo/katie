@@ -7,6 +7,9 @@ init(autoreset=True)
 
 def process_output_csv(input_csv, output_csv):
     print(f"{Fore.GREEN}Processing input CSV: {input_csv}{Style.RESET_ALL}")
+    # Dictionary to cache frame data for each lookup file
+    lookup_cache = {}
+
     with open(input_csv, mode='r') as infile, open(output_csv, mode='w', newline='') as outfile:
         reader = csv.DictReader(infile)
         fieldnames = reader.fieldnames + ['new_x', 'new_y']
@@ -19,8 +22,13 @@ def process_output_csv(input_csv, output_csv):
             body_part = row['mark']
             lookup_file = row['lookupfile']
 
-            # Read the frame lookup data
-            frame_data = read_frame_lookup(lookup_file)
+            # Check if the lookup file data is already cached
+            if lookup_file not in lookup_cache:
+                # Read the frame lookup data and cache it
+                lookup_cache[lookup_file] = read_frame_lookup(lookup_file)
+
+            # Get the frame data from the cache
+            frame_data = lookup_cache[lookup_file]
 
             # Get the new x and y values
             if frame in frame_data and body_part in frame_data[frame]:
