@@ -90,7 +90,8 @@ def process_file(file_path, output_data):
 
     # Extract video number from the trial information
     # Assuming the format is something like 'hyn_01_left', 'ott_02_right', etc.
-    video_number = trial_info.split('_')[1].lstrip('0')  # Remove leading zeros
+    video_number = trial_info.split('_')[1]  # Get the video number part
+    video_number = str(int(video_number))  # Convert to int and back to string to remove leading zeros
 
     # Construct the lookup file path
     lookupfile = f'./framelookup/{animal_name}/{video_number}.csv'
